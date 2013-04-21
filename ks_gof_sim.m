@@ -9,7 +9,6 @@ KS_data = max(CDF_dist);
 % Generate synthetic data sets
 KS_syn = zeros(num_syn,1);
 for ii = 1:num_syn
-    tic
     randcounts = zeros(num_data_points,1);
     % Generate random numbers from best-fit p(k) using CDF inversion
     sum_pk = sum(fit_pk);
@@ -21,7 +20,6 @@ for ii = 1:num_syn
         end
         randcounts(jj) = x(i);
     end    
-    toc
     [rand_y,rand_x] = hist(randcounts,min(randcounts):max(randcounts));
     rand_y = rand_y/sum(rand_y);
     rand_x(~rand_y) = [];

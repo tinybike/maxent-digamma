@@ -1,6 +1,5 @@
 function counts = process_konect(data_path, delim, directed)
 % Process edge list data (from the Konect website), and output the counts.
-
 data = importdata(data_path, delim);
 
 out_edges = data(:,1);
@@ -13,23 +12,13 @@ num_nodes = length(node_index);
 
 switch directed
     case 'in'
-        counts = zeros(num_nodes,1);
-        for ii = 1:num_nodes
-            counts(ii) = nnz(node_index(ii) == in_edges);    
-        end
+        counts = hist(in_edges, min(in_edges):max(in_edges));
     case 'out'
-        counts = zeros(num_nodes,1);
-        for ii = 1:num_nodes
-            counts(ii) = nnz(node_index(ii) == out_edges);
-        end
+        counts = hist(out_edges, min(out_edges):max(out_edges));
     otherwise
-        out_counts = zeros(num_nodes,1);
-        in_counts = zeros(num_nodes,1);
-        for ii = 1:num_nodes
-            out_counts(ii) = nnz(node_index(ii) == out_edges);
-            in_counts(ii) = nnz(node_index(ii) == in_edges);    
-        end
-        counts = in_counts + out_counts;
+        edges = [in_edges; out_edges];
+        counts = hist(edges, min(edges):max(edges));        
 end
 
 counts(~counts) = [];
+counts = counts';

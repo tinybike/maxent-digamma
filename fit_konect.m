@@ -42,7 +42,7 @@ directed = {'in', 'in', 'in',...
 warning off
 num_files = length(datafile);
 
-for kk = 1:num_files
+for kk = 7:7
     
     % Convert the edge list input file to counts
     savefile = strcat(strcat(strcat(strcat('ME_PL_fitted_',...
@@ -69,7 +69,8 @@ for kk = 1:num_files
     fit_pk = digamma_pk(x,u,s);
     
     % Goodness-of-fit simulations
-    p_val = ks_gof_sim(x,y,fit_pk,u,s,10,length(counts));
+    p_val = ks_gof_sim(x,y,fit_pk,u,s,3,length(counts));
+%     p_val = 0;
     
     % Output to screen in TeX table format
     fprintf('%s & %f(%f) & %f(%f) & %f & %i & %f & %f\\\\\n',...

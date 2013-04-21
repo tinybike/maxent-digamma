@@ -7,9 +7,6 @@ in_edges = data(:,2);
 
 clear data
 
-node_index = unique([in_edges out_edges]);
-num_nodes = length(node_index);
-
 switch directed
     case 'in'
         counts = hist(in_edges, min(in_edges):max(in_edges));

@@ -90,9 +90,19 @@ for kk = 1:num_files
     % Goodness-of-fit simulations
     p_val = ks_gof_sim(x,y,fit_pk,u,s,1000,length(counts));
     
+    % Scaling exponent
+    g = u/s;
+    g_err = g*sqrt((u_err/u)^2+(k0_err/k0)^2);
+    
     % Output to screen in TeX table format
-    fprintf('%s & %f(%f) & %f(%f) & %f & %i & %f & %f\\\\\n',...
-        fig_title{kk},u,u_err,k0,k0_err,mean(counts),sum(freq),u/s,p_val);
+    [u_sig,u_paren] = pretty_errors(u,u_err);
+    [k0_sig,k0_paren] = pretty_errors(k0,k0_err);
+    [g_sig,g_paren] = pretty_errors(g,g_err);
+    comma_N = insert_commas(sum(freq));
+    mean_k = num2str(round(mean(counts)*1000)/1000);
+    fprintf('%s & %s(%s) & %s(%s) & %s & %s & %s(%s) & %s\\\\\n',...
+        fig_title{kk},u_sig,u_paren,k0_sig,k0_paren,mean_k,comma_N,...
+        g_sig,g_paren,num2str(p_val));
     
     % Label plot and save to EPS file
     figure(1)
@@ -104,11 +114,11 @@ for kk = 1:num_files
     xlabel(fig_xlabel{kk},'interpreter','latex','fontsize',22)
     ylabel('probability','interpreter','latex','fontsize',22)
     title(fig_title{kk},'interpreter','latex','fontsize',22)
-    print('-depsc2',strcat('ME_PL_fit_',datafile{kk}));
+%     print('-depsc2',strcat('ME_PL_fit_',datafile{kk}));
     
     % Save workspace
     savefile = strcat(strcat(strcat(strcat('ME_PL_fitted_',...
-        datafile{kk}),'_'),directed{kk}),'.mat');
-    save(savefile);
+        datafile{kk}),'_'),directed{kk}),'_new.mat');
+%     save(savefile);
     
 end

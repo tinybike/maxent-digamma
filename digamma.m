@@ -3,7 +3,6 @@ function y = digamma(x,s)
 x_max = max(x);
 u = zeros(x_max,1);
 
-u(1) = 1;
 for jj = 2:x_max
     u(jj) = 1/(1+s*(jj-1));
 end

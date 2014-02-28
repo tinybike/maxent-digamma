@@ -1,14 +1,29 @@
-function p = ks_gof_sim(x,y,fit_pk,u,s,num_syn,num_data_points)
+function p = ks_gof_sim(x,y,fit_pk,u,s,num_syn,num_data_points,max_k)
 % Goodness-of-fit test described in Clauset, Shalizi, Newman, SIAM Review
-% 2009.
+% 2009.  This goodness-of-fit test is based on the KS test, and compares
+% maximum difference between the CDFs (not the complementary CDF) of 
+% theory and experiment, then of fit and simulation.
+% If p(k) is accurate, then the actual fit should be better than fits to 
+% randomly generated datasets from p(k) half of the time.  (We set our 
+% threshold at 5%.)
+% Note: to build random data sets for the simulations, we need the entire
+% theoretical p(k).
 CDF_data = cumsum(y);
 CDF_fit_pk = cumsum(fit_pk);
-CDF_dist = abs(CDF_data-CDF_fit_pk);
+j = 1;
+CDF_fit_pk_compare = zeros(length(x),1);
+for i = x'
+    if ~i && ~min(x)
+        CDF_fit_pk_compare(j) = CDF_fit_pk(i+1);
+    else
+        CDF_fit_pk_compare(j) = CDF_fit_pk(i);
+    end
+    j = j + 1;
+end
+% CDF_dist = abs(CDF_data-CDF_fit_pk);
+CDF_dist = abs(CDF_data-CDF_fit_pk_compare);
 KS_data = max(CDF_dist);
-% KS_index = find(CDF_dist == KS_data);
-% fprintf('N = %i\n',length(counts));
-% fprintf('%i\t%f\n',KS_index,KS_data);
-% fprintf('Simulating...\n');
+full_x = (1:max_k)';
 
 % Generate synthetic data sets
 KS_syn = zeros(num_syn,1);
@@ -22,18 +37,23 @@ for ii = 1:num_syn
         while CDF_fit_pk(i) < randx
             i = i + 1;
         end
-        randcounts(jj) = x(i);
+        randcounts(jj) = full_x(i);
     end    
     [rand_y,rand_x] = hist(randcounts,min(randcounts):max(randcounts));
     rand_y = rand_y/sum(rand_y);
     rand_x(~rand_y) = [];
     rand_y(~rand_y) = [];
     cdf_randdata = cumsum(rand_y)';
-    this_pk = digamma_pk(rand_x,u,s);
-    CDF_dist = abs(cdf_randdata-cumsum(this_pk));
+    this_pk = digamma_pk(1:max_k,u,s);
+    CDF_this_pk = cumsum(this_pk);
+    j = 1;
+    CDF_this_pk_compare = zeros(length(rand_x),1);
+    for i = rand_x
+        CDF_this_pk_compare(j) = CDF_this_pk(i);
+        j = j + 1;
+    end
+    CDF_dist = abs(cdf_randdata-CDF_this_pk_compare);
     KS_syn(ii) = max(CDF_dist);
-%     KS_index = find(CDF_dist == KS_syn(ii));
-%     fprintf('%i\t%f\t%i\n',KS_index,KS_syn(ii),KS_data < KS_syn(ii));
 end
 
 % P-value: KS_data is smaller than what fraction of synthetic datasets?

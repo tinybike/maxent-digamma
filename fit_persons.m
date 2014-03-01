@@ -4,7 +4,7 @@
 % (c) Jack Peterson, 4/18/2013
 
 % Basic file and dataset info
-basepath = '/home/jack/src/digamma/';
+basepath = '/Users/jack/Documents/Scripts/digamma/';
 datafile = {'freq_orgs.txt', 'freq_persons.txt', 'freq_places.txt'};
 fig_title = datafile;
 fig_xlabel = {'orgs', 'words', 'places'};
@@ -31,7 +31,7 @@ for kk = 1:num_files
     fit_pk = digamma_pk(x,u,s);
     
     % Goodness-of-fit simulations
-    % p_val = ks_gof_sim(x,y,fit_pk,u,s,1000,length(counts));
+    p_val = ks_gof_sim(x,y,fit_pk,u,s,1000,length(counts));
     
     % Scaling exponent
     g = u/s;

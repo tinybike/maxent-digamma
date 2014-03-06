@@ -84,11 +84,11 @@ for kk = 1:num_files
     set(gcf, 'PaperPositionMode', 'manual');
     set(gcf, 'PaperPosition',[0 0 pos(3)+ti(1)+ti(3) pos(4)+ti(2)+ti(4)]);
 
-    print('-dpdf',strcat(strcat('ME_PL_fit_',datafile{kk}),'_'));
+    print('-dpdf',strcat('ME_PL_fit_',datafile{kk}));
     
         % Save workspace
-    savefile = strcat(strcat(strcat('ME_PL_fitted_',...
-        datafile{kk}),'_'),'.mat');
+    savefile = strcat(strcat('ME_PL_fitted_',...
+        datafile{kk}),'.mat');
     save(savefile);
     
 end

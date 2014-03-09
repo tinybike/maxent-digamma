@@ -11,8 +11,10 @@ function p = ks_gof_sim(x,y,fit_pk,u,s,num_syn,num_data_points,max_k)
 CDF_data = cumsum(y);
 CDF_fit_pk = cumsum(fit_pk);
 j = 1;
-CDF_fit_pk_compare = zeros(length(x),1);
-for i = x'
+len_x = length(x);
+CDF_fit_pk_compare = zeros(len_x,1);
+% for i = x'
+for i = x(1):len_x
     if ~i && ~min(x)
         CDF_fit_pk_compare(j) = CDF_fit_pk(i+1);
     else

@@ -16,7 +16,7 @@ for kk = 1:num_files
     % Convert the edge list input file to counts
     counts = importdata(strcat(basepath,datafile{kk}));
 
-        % Calculate PDF from counts
+    % Calculate PDF from counts
     [x,y,freq] = get_pdf(counts);
     cdf_y = flipud(cumsum(flipud(y)));
     

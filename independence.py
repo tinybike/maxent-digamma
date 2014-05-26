@@ -21,7 +21,7 @@ class IndependenceTest(object):
         """Load data from files and calculate histograms"""
         for category in self.categories:
             hist = {}
-            filepath = os.path.join(path, self.datafiles[category])
+            filepath = os.path.join(self.path, self.datafiles[category])
             with open(filepath) as datafile:
                 for line in datafile:
                     try:
@@ -49,7 +49,10 @@ class IndependenceTest(object):
                 self.con_table.append(row)
 
     def chisquare_independence_test(self):
-        """Chi-squared test: if P < 0.05, then data sets are independent"""
+        """
+        Chi-squared test for independence
+        If p-value < significance_level, then the data sets are independent
+        """
         self.chi2, self.pval, self.dof, self.ex = chi2_contingency(self.con_table)
         self.result = 'independent' if self.pval < self.significance_level \
             else 'not independent'
